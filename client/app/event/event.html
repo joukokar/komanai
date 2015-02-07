@@ -1,9 +1,15 @@
 <div ng-include="'components/navbar/navbar.html'"></div>
 <div class="col-sm-12">
-  images
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="map" ymap style="width:100%; height:500px"></div>
+    </div>
+  </div>
   <ul class="list list-unstyled">
     <li ng-repeat="image in images" class="col-sm-3">
       <img ng-src="/assets/images/captures/{{image}}" class="img-thumbnail img-responsive">
     </li>
   </ul>
 </div>
+
+
