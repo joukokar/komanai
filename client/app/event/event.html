@@ -1,0 +1,9 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="col-sm-12">
+  images
+  <ul class="list list-unstyled">
+    <li ng-repeat="image in images" class="col-sm-3">
+      <img ng-src="/assets/images/captures/{{image}}" class="img-thumbnail img-responsive">
+    </li>
+  </ul>
+</div>
