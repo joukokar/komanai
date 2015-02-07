@@ -3,7 +3,7 @@
 angular.module('komanaiApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
-      'title': 'Home',
+      'title': 'Events',
       'link': '/'
     }];
 

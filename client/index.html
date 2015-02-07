@@ -73,6 +73,8 @@
           <script src="app/event/ymap.directive.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>
+          <script src="app/unity/unity.service.js"></script>
+          <script src="app/unity/unity_view.directive.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>
           <script src="components/modal/modal.service.js"></script>
@@ -82,6 +84,15 @@
           <!-- endinjector -->
         <!-- endbuild -->
         <script type="text/javascript" charset="utf-8" src="http://js.api.olp.yahooapis.jp/OpenLocalPlatform/V1/jsapi?appid=dj0zaiZpPU9ndGFaSWFtYzdIYyZzPWNvbnN1bWVyc2VjcmV0Jng9NjQ-"></script>
+
+        <script type="text/javascript">
+        <!--
+        var unityObjectUrl = "http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject2.js";
+        if (document.location.protocol == 'https:')
+            unityObjectUrl = unityObjectUrl.replace("http://", "https://ssl-");
+        document.write('<script type="text/javascript" src="' + unityObjectUrl + '"></script>');
+        -->
+        </script>
 
 </body>
 </html>
