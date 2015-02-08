@@ -3,8 +3,11 @@
 angular.module('komanaiApp')
   .controller('NavbarCtrl', function ($scope, $location, Auth) {
     $scope.menu = [{
-      'title': 'Events',
+      'title': 'イベント',
       'link': '/'
+    }, {
+      'title': 'キャプチャー',
+      'link': '/captures'
     }];
 
     $scope.isCollapsed = true;

@@ -9,9 +9,13 @@
       ng-click="setMode('3d')">3D</div>
 
     <div class="btn btn-default"
-      ng-click="unity.watchFW1()">花火会場1</div>
+      ng-click="unity.focusOnFireworks('1')">花火会場1</div>
     <div class="btn btn-default"
-      ng-click="unity.watchFW2()">花火会場2</div>
+      ng-click="unity.focusOnFireworks('2')">花火会場2</div>
+    <div class="btn btn-default"
+      ng-click="unity.toStreetLevel()">下から見る</div>
+    <div class="btn btn-default"
+      ng-click="unity.to50mLevel()">上から見る</div>
 
     <label>x</label>
     <input type="number" ng-model="x">
