@@ -8,7 +8,7 @@ angular.module('komanaiApp')
     service.currentPos = {};
 
     // TODO: does not belong here
-    service.showingImage = -1;
+    service.visibleImage = undefined;
 
     service.moveToPosition = function(x,y,z) {
       service.currentPos = {x:x, y:y, z:z}
