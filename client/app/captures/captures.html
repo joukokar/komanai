@@ -1,0 +1,22 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+    <p>下の写真が混んでますか？(1混んでない、5混んでる）</p>
+    <ul class="list list-unstyled">
+      <li ng-repeat="image in images | orderBy:'time':true" style="margin-bottom:1em;">
+        <div class="row">
+          <div class="col-sm-6">
+            <img ng-src="/assets/images/captures/{{image.filename}}" class="img-responsive">
+          </div>
+          <div class="col-sm-6">
+            <p>撮影時間 {{image.time | date:'HH:mm'}}</p>
+            <button class="btn btn-default" ng-class="{'active': image.rating == 1}" ng-click="setRating(image, 1)">1</button>
+            <button class="btn btn-info" ng-class="{'active': image.rating == 2}" ng-click="setRating(image, 2)">2</button>
+            <button class="btn" style="background-color:#eeffbb" ng-class="{'active': image.rating == 3}" ng-click="setRating(image, 3)">3</button>
+            <button class="btn btn-warning" ng-class="{'active': image.rating == 4}" ng-click="setRating(image, 4)">4</button>
+            <button class="btn btn-danger" ng-class="{'active': image.rating == 5}" ng-click="setRating(image, 5)">5</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
