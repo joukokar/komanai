@@ -14,10 +14,11 @@ angular.module('komanaiApp')
            }
          });
         scope.ymap = ymap;
+        scope.markers = [];
 
         ymap.drawMap(new Y.LatLng(35.712711, 139.804622), 16, Y.LayerSetId.NORMAL);
 
-        var mapdata = [
+        /*var mapdata = [
           //
           [1,2,3,4,2,2,0,1,3,2,1,4,2,3,4,2,3,4,2],
           [1,2,3,4,2,2,2,1,3,2,1,4,2,3,4,2,3,4,2],
@@ -26,9 +27,9 @@ angular.module('komanaiApp')
           [1,2,3,4,2,2,0,2,4,4,5,4,2,3,4,2,3,4,2],
           [1,2,3,4,2,4,0,0,4,4,4,4,2,3,4,2,3,4,2],
           [1,2,3,4,2,4,2,0,0,2,4,4,2,5,4,2,3,4,2],
-        ];
+        ];*/
 
-        var COLORS = ["ffffff", "0000ff", "4444bb", "884488", "ff8800", "ff0000"];
+        var COLORS = ["eeeeee", "0000ff", "4444bb", "884488", "ff8800", "ff0000"];
 
 
         //between these
@@ -67,8 +68,8 @@ angular.module('komanaiApp')
 
         //console.log(scope.latToZ(minLat), scope.ZToLat(scope.latToZ(minLat)));
         //console.log(scope.latToZ(maxLat), scope.ZToLat(scope.latToZ(maxLat)));
-        console.log(scope.lngToX(minLng), scope.XToLng(scope.lngToX(minLng)));
-        scope.UpdateMarker = function(msg) {
+        //console.log(scope.lngToX(minLng), scope.XToLng(scope.lngToX(minLng)));
+        /*scope.UpdateMarker = function(msg) {
           console.log("got ", msg);
           var matches = msg.match(/([^,]+),([^,]+),([^,]+)/);
           if(matches) {
@@ -82,12 +83,12 @@ angular.module('komanaiApp')
           }
         }
 
-        window.UpdateMarker = scope.UpdateMarker.bind(this);
+        window.UpdateMarker = scope.UpdateMarker.bind(this);*/
 
         var centerLat = minLat + latScale/2;
         var centerLng = minLng + lngScale/2;
 
-        scope.nowMarker = new Y.Marker(new Y.LatLng(centerLat, centerLng));
+        /*scope.nowMarker = new Y.Marker(new Y.LatLng(centerLat, centerLng));
         ymap.addFeature(scope.nowMarker);
 
         for(var y=0; y<mapdata.length; y++) {
@@ -111,32 +112,17 @@ angular.module('komanaiApp')
               ymap.addFeature(circle);
             }
           }
-        }
+        }*/
 
 
-        // parse name and return {lat:, lng:}
-        function parseImageName(name) {
-          var lat, lng;
-
-          var parts = name.match(/(\d+)_(\d+)_(\d+).*/);
-          //console.log(name, parts);
-          lat = parseInt(parts[1])/10000000;
-          lng = parseInt(parts[2])/10000000;
-
-          // TODO: capture timestamp
-          //var time = moment().year(parts[3].splice(0,4))
-          //console.log(time);
-          return {
-            lat: lat,
-            lng: lng
-          }
-        }
-
-        function hasExistingMarker(location) {
+        function getExistingMarker(img) {
           var matchingMarkers = _.select(scope.markers, function(m) {
-            return location.lat == m.lat && location.lng == m.lng
+            return img.filename == m.filename
           });
-          return matchingMarkers.length > 0;
+          if(matchingMarkers.length > 0)
+            return matchingMarkers[0];
+          else
+            return null;
         }
 
         function addMarker(name, location) {
@@ -153,19 +139,44 @@ angular.module('komanaiApp')
 
         }
 
-        scope.markers = [];
-
         socket.socket.on('image:list', function(res) {
           var img;
+          console.log("GOT", res);
           scope.images = res;
           for(var i=0; i<scope.images.length; i++) {
             img = scope.images[i];
-            var parsedLocation = parseImageName(img);
 
+            var existing = getExistingMarker(img);
             // add only if does not exist already
-            if(!hasExistingMarker(parsedLocation)) {
-              console.log("adding", parsedLocation);
-              addMarker(img, parsedLocation);
+            if(existing && existing.rating != img.rating) {
+              ymap.removeFeature(existing.obj);
+              scope.markers.splice(scope.markers.indexOf(existing),1);
+              existing = null;
+            }
+            if(!existing) {
+              var strokeStyle = new Y.Style(COLORS[img.rating], null, 0.2);
+              var fillStyle   = new Y.Style(COLORS[img.rating], null, 0.2);
+              var circle = new Y.Circle(
+                new Y.LatLng(img.lat, img.lng),
+                new Y.Size(0.1, 0.1),
+                {
+                  unit:"km",
+                  strokeStyle: strokeStyle,
+                  fillStyle: fillStyle
+              });
+              circle.bind('click', function(latlng){
+                  console.log(latlng, this);
+                  console.log(this.latlng.Lat, this.latlng.Lon);
+                  unity.moveToPosition(scope.lngToX(this.latlng.Lon), 1, scope.latToZ(this.latlng.Lat))
+              });
+              ymap.addFeature(circle);
+              var marker = {
+                obj: circle,
+                filename: img.filename,
+                rating: img.rating
+              };
+              scope.markers.push(marker);
+
             }
           }
         });
